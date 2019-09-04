@@ -11,7 +11,7 @@ jobs:
         with:
           java-version: 1.8
       - run: mvn clean verify -DskipTests=true --show-version
-test-with-server:
+  test-with-server:
     needs: lint
     runs-on: ubuntu-latest
     strategy:
