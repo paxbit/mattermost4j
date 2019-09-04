@@ -1,0 +1,95 @@
+name: CI
+
+on: [push]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - run: mvn clean verify -DskipTests=true --show-version
+test-with-server:
+    needs: lint
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        mattermost-version: [5.14.0, 5.9.3, 5.13.2, 5.12.5]
+    services:
+      mysql:
+        image: mysql:5.7
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: mostest
+          MYSQL_USER: mmuser
+          MYSQL_PASSWORD: mostest
+          MYSQL_DATABASE: mattermost-test
+      inbucket:
+        image: jhillyerd/inbucket:release-2.0.0
+        ports:
+          - 2500:2500
+      mattermost:
+        image: mattermost/mattermost-enterprise-edition:${{ matrix.mattermost-version }}
+        ports:
+          - 8065:8000
+        env:
+          MM_SQLSETTINS_DATASOURCE: mysql://mmuser:mostest@mysql:3306/mattermost-test
+          MM_PLUGINSETTINGS_ENABLEUPLOADS: true
+          MM_EMAILSETTINGS_SMTPSERVER: inbucket
+          MM_EMAILSETTINGS_SMTPPORT: 2500
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - run: mvn clean verify --show-version
+        env:
+          MATTERMOST_URL: http://mattermost:8065
+          INBUCKET_HOST: inbucket
+          USE_LOCAL_DUMMY_SERVER: false
+          DUMMY_HTTP_SERVER_HOST: static.bis5.net
+  sonarqube:
+    needs: [test-with-server]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        mattermost-version: [5.14.0]
+    services:
+      mysql:
+        image: mysql:5.7
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: mostest
+          MYSQL_USER: mmuser
+          MYSQL_PASSWORD: mostest
+          MYSQL_DATABASE: mattermost-test
+      inbucket:
+        image: jhillyerd/inbucket:release-2.0.0
+        ports:
+          - 2500:2500
+      mattermost:
+        image: mattermost/mattermost-enterprise-edition:${{ matrix.mattermost-version }}
+        ports:
+          - 8065:8000
+        env:
+          MM_SQLSETTINS_DATASOURCE: mysql://mmuser:mostest@mysql:3306/mattermost-test
+          MM_PLUGINSETTINGS_ENABLEUPLOADS: true
+          MM_EMAILSETTINGS_SMTPSERVER: inbucket
+          MM_EMAILSETTINGS_SMTPPORT: 2500
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - run: mvn clean verify sonar:sonar --show-version -s .circleci/settings-sonar.xml
+        env:
+          MATTERMOST_URL: http://mattermost:8065
+          INBUCKET_HOST: inbucket
+          USE_LOCAL_DUMMY_SERVER: false
+          DUMMY_HTTP_SERVER_HOST: static.bis5.net
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
