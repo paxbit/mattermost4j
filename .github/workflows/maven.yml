@@ -76,10 +76,10 @@ jobs:
         ports:
           - 8000/tcp
         env:
-          MM_SQLSETTINS_DATASOURCE: mysql://mmuser:mostest@mysql:${{ job.services.mysql.ports['3306'] }}/mattermost-test
+          MM_SQLSETTINS_DATASOURCE: mysql://mmuser:mostest@mysql:3306/mattermost-test
           MM_PLUGINSETTINGS_ENABLEUPLOADS: true
           MM_EMAILSETTINGS_SMTPSERVER: inbucket
-          MM_EMAILSETTINGS_SMTPPORT: ${{ job.services.inbucket.ports['2500'] }}
+          MM_EMAILSETTINGS_SMTPPORT: 2500
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-java@v1
