@@ -14,6 +14,8 @@ jobs:
   test-with-server:
     needs: lint
     runs-on: ubuntu-latest
+    container:
+      image: openjdk:8-jdk-stretch
     strategy:
       matrix:
         mattermost-version: [5.14.0, 5.9.3, 5.13.2, 5.12.5]
@@ -55,6 +57,8 @@ jobs:
   sonarqube:
     needs: [test-with-server]
     runs-on: ubuntu-latest
+    container:
+      image: openjdk:8-jdk-stretch
     strategy:
       matrix:
         mattermost-version: [5.14.0]
