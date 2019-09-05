@@ -21,7 +21,7 @@ jobs:
       mysql:
         image: mysql:5.7
         ports:
-          - 3306:3306
+          - 3306/tcp
         env:
           MYSQL_ROOT_PASSWORD: mostest
           MYSQL_USER: mmuser
@@ -30,16 +30,16 @@ jobs:
       inbucket:
         image: jhillyerd/inbucket:release-2.0.0
         ports:
-          - 2500:2500
+          - 2500/tcp
       mattermost:
         image: mattermost/mattermost-enterprise-edition:${{ matrix.mattermost-version }}
         ports:
-          - 8065:8000
+          - 8000/tcp
         env:
-          MM_SQLSETTINS_DATASOURCE: mysql://mmuser:mostest@mysql:3306/mattermost-test
+          MM_SQLSETTINS_DATASOURCE: mysql://mmuser:mostest@mysql:${{ job.services.mysql.ports['3306'] }}/mattermost-test
           MM_PLUGINSETTINGS_ENABLEUPLOADS: true
           MM_EMAILSETTINGS_SMTPSERVER: inbucket
-          MM_EMAILSETTINGS_SMTPPORT: 2500
+          MM_EMAILSETTINGS_SMTPPORT: ${{ job.services.inbucket.ports['2500'] }}
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-java@v1
@@ -47,7 +47,7 @@ jobs:
           java-version: 1.8
       - run: mvn clean verify --show-version
         env:
-          MATTERMOST_URL: http://mattermost:8065
+          MATTERMOST_URL: http://mattermost:${{ job.services.mattermost.ports['8000'] }}
           INBUCKET_HOST: inbucket
           USE_LOCAL_DUMMY_SERVER: false
           DUMMY_HTTP_SERVER_HOST: static.bis5.net
@@ -61,7 +61,7 @@ jobs:
       mysql:
         image: mysql:5.7
         ports:
-          - 3306:3306
+          - 3306/tcp
         env:
           MYSQL_ROOT_PASSWORD: mostest
           MYSQL_USER: mmuser
@@ -70,16 +70,16 @@ jobs:
       inbucket:
         image: jhillyerd/inbucket:release-2.0.0
         ports:
-          - 2500:2500
+          - 2500/tcp
       mattermost:
         image: mattermost/mattermost-enterprise-edition:${{ matrix.mattermost-version }}
         ports:
-          - 8065:8000
+          - 8000/tcp
         env:
-          MM_SQLSETTINS_DATASOURCE: mysql://mmuser:mostest@mysql:3306/mattermost-test
+          MM_SQLSETTINS_DATASOURCE: mysql://mmuser:mostest@mysql:${{ job.services.mysql.ports['3306'] }}/mattermost-test
           MM_PLUGINSETTINGS_ENABLEUPLOADS: true
           MM_EMAILSETTINGS_SMTPSERVER: inbucket
-          MM_EMAILSETTINGS_SMTPPORT: 2500
+          MM_EMAILSETTINGS_SMTPPORT: ${{ job.services.inbucket.ports['2500'] }}
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-java@v1
@@ -87,7 +87,7 @@ jobs:
           java-version: 1.8
       - run: mvn clean verify sonar:sonar --show-version -s .circleci/settings-sonar.xml
         env:
-          MATTERMOST_URL: http://mattermost:8065
+          MATTERMOST_URL: http://mattermost:${{ job.services.mattermost.ports['8000'] }}
           INBUCKET_HOST: inbucket
           USE_LOCAL_DUMMY_SERVER: false
           DUMMY_HTTP_SERVER_HOST: static.bis5.net
