@@ -14,8 +14,6 @@ jobs:
   test-with-server:
     needs: lint
     runs-on: ubuntu-latest
-    container:
-      image: maven:3.6-jdk-8
     strategy:
       matrix:
         mattermost-version: [5.14.0, 5.9.3, 5.13.2, 5.12.5]
@@ -50,15 +48,13 @@ jobs:
           java-version: 1.8
       - run: mvn clean verify --show-version
         env:
-          MATTERMOST_URL: http://mattermost:${{ job.services.mattermost.ports['8000'] }}
+          MATTERMOST_URL: http://localhost:${{ job.services.mattermost.ports['8000'] }}
           INBUCKET_HOST: inbucket
           USE_LOCAL_DUMMY_SERVER: false
           DUMMY_HTTP_SERVER_HOST: static.bis5.net
   sonarqube:
     needs: [test-with-server]
     runs-on: ubuntu-latest
-    container:
-      image: maven:3.6-jdk-8
     strategy:
       matrix:
         mattermost-version: [5.14.0]
@@ -93,7 +89,7 @@ jobs:
           java-version: 1.8
       - run: mvn clean verify sonar:sonar --show-version -s .circleci/settings-sonar.xml
         env:
-          MATTERMOST_URL: http://mattermost:${{ job.services.mattermost.ports['8000'] }}
+          MATTERMOST_URL: http://localhost:${{ job.services.mattermost.ports['8000'] }}
           INBUCKET_HOST: inbucket
           USE_LOCAL_DUMMY_SERVER: false
           DUMMY_HTTP_SERVER_HOST: static.bis5.net
