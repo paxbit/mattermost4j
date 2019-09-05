@@ -36,7 +36,8 @@ jobs:
         ports:
           - 8000/tcp
         env:
-          MM_SQLSETTINS_DATASOURCE: mmuser:mostest@tcp(mysql:3306)/mattermost_test?charset=utf8mb4,utf8&readTimeout=30s&writeTimeout=30s
+          MM_SQLSETTINGS_DRIVERNAME: mysql
+          MM_SQLSETTINGS_DATASOURCE: mmuser:mostest@tcp(mysql:3306)/mattermost_test?charset=utf8mb4,utf8&readTimeout=30s&writeTimeout=30s
           MM_PLUGINSETTINGS_ENABLEUPLOADS: true
           MM_EMAILSETTINGS_SMTPSERVER: inbucket
           MM_EMAILSETTINGS_SMTPPORT: 2500
@@ -76,7 +77,8 @@ jobs:
         ports:
           - 8000/tcp
         env:
-          MM_SQLSETTINS_DATASOURCE: mmuser:mostest@tcp(mysql:3306)/mattermost_test?charset=utf8mb4,utf8&readTimeout=30s&writeTimeout=30s
+          MM_SQLSETTINGS_DRIVERNAME: mysql
+          MM_SQLSETTINGS_DATASOURCE: mmuser:mostest@tcp(mysql:3306)/mattermost_test?charset=utf8mb4,utf8&readTimeout=30s&writeTimeout=30s
           MM_PLUGINSETTINGS_ENABLEUPLOADS: true
           MM_EMAILSETTINGS_SMTPSERVER: inbucket
           MM_EMAILSETTINGS_SMTPPORT: 2500
