@@ -36,6 +36,7 @@ jobs:
         ports:
           - 8000/tcp
         env:
+          MM_SERVICESETTINGS_LISTENADDRESS: ":8000"
           MM_SQLSETTINGS_DRIVERNAME: mysql
           MM_SQLSETTINGS_DATASOURCE: mmuser:mostest@tcp(mysql:3306)/mattermost_test?charset=utf8mb4,utf8&readTimeout=30s&writeTimeout=30s
           MM_PLUGINSETTINGS_ENABLEUPLOADS: true
@@ -51,6 +52,7 @@ jobs:
         env:
           MATTERMOST_URL: http://localhost:${{ job.services.mattermost.ports['8000'] }}
           INBUCKET_HOST: inbucket
+          INBUCKET_PORT: ${{ job.services.inbucket.ports['2500'] }}
           USE_LOCAL_DUMMY_SERVER: false
           DUMMY_HTTP_SERVER_HOST: static.bis5.net
   sonarqube:
@@ -78,6 +80,7 @@ jobs:
         ports:
           - 8000/tcp
         env:
+          MM_SERVICESETTINGS_LISTENADDRESS: ":8000"
           MM_SQLSETTINGS_DRIVERNAME: mysql
           MM_SQLSETTINGS_DATASOURCE: mmuser:mostest@tcp(mysql:3306)/mattermost_test?charset=utf8mb4,utf8&readTimeout=30s&writeTimeout=30s
           MM_PLUGINSETTINGS_ENABLEUPLOADS: true
@@ -93,6 +96,7 @@ jobs:
         env:
           MATTERMOST_URL: http://localhost:${{ job.services.mattermost.ports['8000'] }}
           INBUCKET_HOST: inbucket
+          INBUCKET_PORT: ${{ job.services.inbucket.ports['2500'] }}
           USE_LOCAL_DUMMY_SERVER: false
           DUMMY_HTTP_SERVER_HOST: static.bis5.net
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
