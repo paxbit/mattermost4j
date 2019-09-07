@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        mattermost-version: [5.14.2, 5.9.4, 5.13.2, 5.12.5]
+        mattermost-version: [5.14.0, 5.9.3, 5.13.2, 5.12.5]
     services:
       inbucket:
         image: jhillyerd/inbucket:release-2.0.0
@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        mattermost-version: [5.14.2]
+        mattermost-version: [5.14.0]
     services:
       inbucket:
         image: jhillyerd/inbucket:release-2.0.0
