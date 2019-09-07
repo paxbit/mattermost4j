@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        mattermost-version: [5.14.2, 5.9.3]
+        mattermost-version: [5.14.2, 5.9.4]
     services:
       mysql:
         image: mysql:5.7
