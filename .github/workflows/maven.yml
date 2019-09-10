@@ -42,6 +42,7 @@ jobs:
           MM_SQLSETTINGS_DATASOURCE: "postgres://mmuser:mostest@postgres:5432/mattermost_test?sslmode=disable&connect_timeout=10"
           MM_EMAILSETTINGS_SMTPSERVER: inbucket
           MM_EMAILSETTINGS_SMTPPORT: 2500
+          MM_PLUGINSETTINGS_ENABLEUPLOADS: true
           MM_RATELIMITSETTINGS_ENABLE: false
     steps:
       - uses: actions/checkout@v1
