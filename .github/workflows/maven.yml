@@ -43,11 +43,11 @@ jobs:
           MM_EMAILSETTINGS_SMTPSERVER: inbucket
           MM_EMAILSETTINGS_SMTPPORT: 2500
         volumes:
-          /mattermost/data: $HOME/mm-data
-          /mattermost/logs: $HOME/mm-logs
-          /mattermost/config: $HOME/mm-config
-          /mattermost/plugins: $HOME/mm-plugins
-          /mattermost/client/plugins: $HOME/mm-client-plugins
+          - /mattermost/data:$HOME/mm-data
+          - /mattermost/logs:$HOME/mm-logs
+          - /mattermost/config:$HOME/mm-config
+          - /mattermost/plugins:$HOME/mm-plugins
+          - /mattermost/client/plugins:$HOME/mm-client-plugins
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-java@v1
