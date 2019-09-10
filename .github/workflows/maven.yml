@@ -51,6 +51,7 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: 1.8
+      - run: mkdir -p /home/runner/work/_temp/{data,plugin,client-plugin} && ls -l /home/runner/work/_temp
       - run: mvn clean verify --show-version
         env:
           MATTERMOST_URL: http://localhost:${{ job.services.mattermost.ports['8065'] }}
@@ -99,6 +100,7 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: 1.8
+      - run: mkdir -p /home/runner/work/_temp/{data,plugin,client-plugin} && ls -l /home/runner/work/_temp
       - run: mvn clean verify sonar:sonar --show-version -s .circleci/settings-sonar.xml
         env:
           MATTERMOST_URL: http://localhost:${{ job.services.mattermost.ports['8065'] }}
