@@ -8,7 +8,8 @@ jobs:
     steps:
       - uses: actions/checkout@latest
       - uses: actions/setup-java@v1
-        java-version: 1.8
+        with:
+          java-version: 1.8
       - run: mvn clean verify -DskipTests=true --show-version
   test-with-server:
     needs: lint
@@ -44,7 +45,8 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-java@v1
-        java-version: 1.8
+        with:
+          java-version: 1.8
       - run: mvn clean verify --show-version
         env:
           MATTERMOST_URL: http://localhost:${{ job.services.mattermost.ports['8065'] }}
@@ -85,7 +87,8 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-java@v1
-        java-version: 1.8
+        with:
+          java-version: 1.8
       - run: mvn clean verify sonar:sonar --show-version -s .circleci/settings-sonar.xml
         env:
           MATTERMOST_URL: http://localhost:${{ job.services.mattermost.ports['8065'] }}
