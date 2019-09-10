@@ -13,8 +13,6 @@ jobs:
   test-with-server:
     needs: lint
     runs-on: ubuntu-latest
-    container:
-      image: circleci/openjdk:8u212-jdk-stretch
     strategy:
       matrix:
         mattermost-version: [5.14.2]
@@ -47,7 +45,7 @@ jobs:
       - uses: actions/checkout@v1
       - run: mvn clean verify --show-version
         env:
-          MATTERMOST_URL: http://mattermost:8065
+          MATTERMOST_URL: http://localhost:${{ job.services.mattermost.ports['8065'] }}
           INBUCKET_HOST: inbucket
           INBUCKET_PORT: 2500
           USE_LOCAL_DUMMY_SERVER: false
@@ -56,8 +54,6 @@ jobs:
   sonarqube:
     needs: [test-with-server]
     runs-on: ubuntu-latest
-    container:
-      image: circleci/openjdk:8u212-jdk-stretch
     strategy:
       matrix:
         mattermost-version: [5.14.0]
@@ -88,7 +84,7 @@ jobs:
       - uses: actions/checkout@v1
       - run: mvn clean verify sonar:sonar --show-version -s .circleci/settings-sonar.xml
         env:
-          MATTERMOST_URL: http://mattermost:8065
+          MATTERMOST_URL: http://localhost:${{ job.services.mattermost.ports['8065'] }}
           INBUCKET_HOST: inbuclet
           INBUCKET_PORT: 2500
           USE_LOCAL_DUMMY_SERVER: false
