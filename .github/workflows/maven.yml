@@ -33,28 +33,23 @@ jobs:
           POSTGRES_PASSWORD: mostest
           POSTGRES_DB: mattermost_test
       mattermost:
-        image: mattermost/mattermost-enterprise-edition:${{ matrix.mattermost-version }}
+        image: mattermost/mattermost-prod-app:${{ matrix.mattermost-version }}
         ports:
-          - 8065/tcp
+          - 8000/tcp
         env:
-          MM_SERVICESETTINGS_LISTENADDRESS: ":8065"
+          MM_SERVICESETTINGS_LISTENADDRESS: ":8000"
           MM_SQLSETTINGS_DRIVERNAME: postgres
           MM_SQLSETTINGS_DATASOURCE: "postgres://mmuser:mostest@postgres:5432/mattermost_test?sslmode=disable&connect_timeout=10"
           MM_EMAILSETTINGS_SMTPSERVER: inbucket
           MM_EMAILSETTINGS_SMTPPORT: 2500
-          MM_FILESETTINGS_DIRECTORY: /__w/_temp/data
-          MM_PLUGINSETTINGS_DIRECTORY: /__w/_temp/plugin
-          MM_PLUGINSETTINGS_CLIENTDIRECTORY: /__w/_temp/client-plugin
-          MM_LOGSETTINGS_FILELOCATION: /__w/_temp
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      - run: mkdir -p /home/runner/work/_temp/{data,plugin,client-plugin} && ls -l /home/runner/work/_temp
       - run: mvn clean verify --show-version
         env:
-          MATTERMOST_URL: http://localhost:${{ job.services.mattermost.ports['8065'] }}
+          MATTERMOST_URL: http://localhost:${{ job.services.mattermost.ports['8000'] }}
           INBUCKET_HOST: inbucket
           INBUCKET_PORT: 2500
           USE_LOCAL_DUMMY_SERVER: false
