@@ -44,7 +44,7 @@ jobs:
           MM_EMAILSETTINGS_SMTPPORT: 2500
           MM_PLUGINSETTINGS_ENABLEUPLOADS: true
           MM_RATELIMITSETTINGS_ENABLE: false
-          MM_LOGSETTINGS_FILELOCATION: /__w/_temp
+          MM_LOGSETTINGS_FILELOCATION: /__w/_temp/
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-java@v1
